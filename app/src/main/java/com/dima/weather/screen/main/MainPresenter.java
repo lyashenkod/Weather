@@ -2,7 +2,6 @@ package com.dima.weather.screen.main;
 
 import android.support.annotation.NonNull;
 
-import com.dima.weather.R;
 import com.dima.weather.repository.WeatherRepository;
 
 import ru.arturvasilov.rxloader.LifecycleHandler;
@@ -13,7 +12,7 @@ import ru.arturvasilov.rxloader.LifecycleHandler;
  */
 public class MainPresenter {
 
-    private final WeatherRepository mWeatherRepository ;
+    private final WeatherRepository mWeatherRepository;
     private final LifecycleHandler mLifecycleHandler;
     private final MainView mView;
 
@@ -26,8 +25,16 @@ public class MainPresenter {
 
     public void getWeatherData(String city) {
         mWeatherRepository.weatherDatas(city)
-                .compose(mLifecycleHandler.load(R.id.main_request))
-                .subscribe(mView::showWeatherData, throwable -> mView.showError(throwable));
+//                .compose(mLifecycleHandler.load(R.id.main_request))
+                .subscribe(mView::showWeatherData, throwable ->
+                        mView.showError(throwable));
+    }
+
+    public void getForecast(int cityId){
+        mWeatherRepository.getForecast(cityId)
+//                .compose(mLifecycleHandler.load(R.id.main_request))
+                .subscribe(mView::showOrmWeatherData,
+                throwable -> mView.showError(throwable));
     }
 
 

@@ -4,15 +4,22 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Liashenko Dima on 05.04.2017.
  */
-public class WeatherData  {
+public class WeatherData extends RealmObject {
 
+    @PrimaryKey
+    @SerializedName("id")
+    private Integer id;
     @SerializedName("coord")
     private Coord coord;
     @SerializedName("weather")
-    private List<Weather> weather = null;
+    private RealmList<Weather> weather = null;
     @SerializedName("base")
     private String base;
     @SerializedName("main")
@@ -27,12 +34,30 @@ public class WeatherData  {
     private Integer dt;
     @SerializedName("sys")
     private Sys sys;
-    @SerializedName("id")
-    private Integer id;
     @SerializedName("name")
     private String name;
     @SerializedName("cod")
     private Integer cod;
+
+    public WeatherData() {
+    }
+
+    public WeatherData(Integer id, Coord coord, RealmList<Weather> weather, String base, Main main,
+                       Integer visibility, Wind wind, Clouds clouds, Integer dt, Sys sys, String name,
+                       Integer cod) {
+        this.id = id;
+        this.coord = coord;
+        this.weather = weather;
+        this.base = base;
+        this.main = main;
+        this.visibility = visibility;
+        this.wind = wind;
+        this.clouds = clouds;
+        this.dt = dt;
+        this.sys = sys;
+        this.name = name;
+        this.cod = cod;
+    }
 
     public Coord getCoord() {
         return coord;
@@ -46,7 +71,7 @@ public class WeatherData  {
         return weather;
     }
 
-    public void setWeather(List<Weather> weather) {
+    public void setWeather(RealmList<Weather> weather) {
         this.weather = weather;
     }
 

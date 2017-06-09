@@ -2,11 +2,17 @@ package com.dima.weather.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Liashenko Dima on 05.04.2017.
  */
-public class Main {
+public class Main extends RealmObject{
 
+    @PrimaryKey
+    @SerializedName("id")
+    private int mId;
     @SerializedName("temp")
     private Double temp;
     @SerializedName("pressure")
@@ -17,6 +23,26 @@ public class Main {
     private Double tempMin;
     @SerializedName("temp_max")
     private Double tempMax;
+
+    public Main() {
+    }
+
+    public Main(int id, Double temp, Integer pressure, Integer humidity, Double tempMin, Double tempMax) {
+        mId = id;
+        this.temp = temp;
+        this.pressure = pressure;
+        this.humidity = humidity;
+        this.tempMin = tempMin;
+        this.tempMax = tempMax;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
 
     public Double getTemp() {
         return temp;

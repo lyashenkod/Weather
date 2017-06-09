@@ -2,15 +2,19 @@ package com.dima.weather.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Liashenko Dima on 05.04.2017.
  */
-public class Sys {
+public class Sys extends RealmObject {
 
-    @SerializedName("type")
-    private Integer type;
+    @PrimaryKey
     @SerializedName("id")
     private Integer id;
+    @SerializedName("type")
+    private Integer type;
     @SerializedName("message")
     private Double message;
     @SerializedName("country")
@@ -19,6 +23,18 @@ public class Sys {
     private Integer sunrise;
     @SerializedName("sunset")
     private Integer sunset;
+
+    public Sys() {
+    }
+
+    public Sys(Integer id, Integer type, Double message, String country, Integer sunrise, Integer sunset) {
+        this.id = id;
+        this.type = type;
+        this.message = message;
+        this.country = country;
+        this.sunrise = sunrise;
+        this.sunset = sunset;
+    }
 
     public Integer getType() {
         return type;

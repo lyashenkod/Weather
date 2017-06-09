@@ -1,10 +1,10 @@
-package com.dima.weather.di.module;
+package com.dima.weather.di;
 
 import android.support.annotation.NonNull;
 
 import com.dima.weather.BuildConfig;
 import com.dima.weather.api.WeatherService;
-import com.dima.weather.repository.DefaultWeatherRepository;
+import com.dima.weather.repository.WeatherRepositoryLegacy;
 import com.dima.weather.repository.WeatherRepository;
 
 import javax.inject.Singleton;
@@ -28,7 +28,7 @@ public class DataModule {
     @Singleton
     WeatherRepository provideWeatherRepository(
             @NonNull WeatherService weatherService) {
-        return new DefaultWeatherRepository(weatherService);
+        return new WeatherRepositoryLegacy(weatherService);
     }
 
     @Provides
@@ -48,12 +48,6 @@ public class DataModule {
                 .build();
     }
 
-
-    /**
-     * Возможна ошибка
-     *
-     * @return
-     */
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient() {

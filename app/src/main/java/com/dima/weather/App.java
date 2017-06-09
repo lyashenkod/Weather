@@ -4,9 +4,9 @@ package com.dima.weather;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.dima.weather.di.component.AppComponent;
-import com.dima.weather.di.component.DaggerAppComponent;
-import com.dima.weather.di.module.DataModule;
+import com.dima.weather.di.AppComponent;
+import com.dima.weather.di.DaggerAppComponent;
+import com.dima.weather.di.DataModule;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;

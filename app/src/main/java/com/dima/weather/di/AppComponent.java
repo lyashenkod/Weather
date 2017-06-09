@@ -1,7 +1,6 @@
-package com.dima.weather.di.component;
+package com.dima.weather.di;
 
 
-import com.dima.weather.di.module.DataModule;
 import com.dima.weather.screen.main.MainActivity;
 
 import javax.inject.Singleton;

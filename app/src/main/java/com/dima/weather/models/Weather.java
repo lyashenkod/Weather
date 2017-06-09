@@ -2,11 +2,16 @@ package com.dima.weather.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Liashenko Dima on 05.04.2017.
  */
-public class Weather {
+public class Weather extends RealmObject {
 
+
+    @PrimaryKey
     @SerializedName("id")
     private Integer id;
     @SerializedName("main")
@@ -15,6 +20,16 @@ public class Weather {
     private String description;
     @SerializedName("icon")
     private String icon;
+
+    public Weather() {
+    }
+
+    public Weather(Integer id, String main, String description, String icon) {
+        this.id = id;
+        this.main = main;
+        this.description = description;
+        this.icon = icon;
+    }
 
     public Integer getId() {
         return id;
