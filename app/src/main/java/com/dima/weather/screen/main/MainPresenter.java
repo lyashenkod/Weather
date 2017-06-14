@@ -1,40 +1,47 @@
 package com.dima.weather.screen.main;
 
-import android.support.annotation.NonNull;
-
+import com.arellomobile.mvp.InjectViewState;
+import com.dima.weather.App;
 import com.dima.weather.repository.WeatherRepository;
+import com.dima.weather.screen.base.BasePresenter;
 
-import ru.arturvasilov.rxloader.LifecycleHandler;
+import javax.inject.Inject;
+
+import rx.Subscription;
 
 
 /**
  * Created by Liashenko Dima on 07.04.2017.
  */
-public class MainPresenter {
 
-    private final WeatherRepository mWeatherRepository;
-    private final LifecycleHandler mLifecycleHandler;
-    private final MainView mView;
+@InjectViewState
+public class MainPresenter extends BasePresenter<MainView> {
 
-    public MainPresenter(@NonNull WeatherRepository repository, @NonNull LifecycleHandler lifecycleHandler,
-                         @NonNull MainView view) {
-        mWeatherRepository = repository;
-        mLifecycleHandler = lifecycleHandler;
-        mView = view;
+    @Inject
+    WeatherRepository mWeatherRepository;
+
+    public MainPresenter( ) {
+        App.getAppComponent().inject(this);
     }
 
     public void getWeatherData(String city) {
-        mWeatherRepository.weatherDatas(city)
-//                .compose(mLifecycleHandler.load(R.id.main_request))
-                .subscribe(mView::showWeatherData, throwable ->
-                        mView.showError(throwable));
+
+        Subscription subscription =  mWeatherRepository.weatherData(city)
+                .doOnSubscribe(getViewState()::showLoadingIndicator)
+                .doAfterTerminate(getViewState()::hideLoadingIndicator)
+                .subscribe(weatherData -> getViewState().showWeatherData(weatherData),
+                        throwable ->
+                        getViewState().showError(throwable));
+        unsubscribeOnDestroy(subscription);
     }
 
     public void getForecast(int cityId){
-        mWeatherRepository.getForecast(cityId)
-//                .compose(mLifecycleHandler.load(R.id.main_request))
-                .subscribe(mView::showOrmWeatherData,
-                throwable -> mView.showError(throwable));
+        Subscription subscription =   mWeatherRepository.getForecast(cityId)
+                .doOnSubscribe(getViewState()::showLoadingIndicator)
+                .doAfterTerminate(getViewState()::hideLoadingIndicator)
+                .subscribe(getViewState()::showOrmWeatherData,
+                throwable -> getViewState().showError(throwable));
+        unsubscribeOnDestroy(subscription);
     }
 
 

@@ -2,10 +2,8 @@ package com.dima.weather.repository;
 
 import android.support.annotation.NonNull;
 
-import com.dima.weather.models.OrmWeather;
-import com.dima.weather.models.WeatherData;
-
-import java.util.List;
+import com.dima.weather.model.CurrentWeather;
+import com.dima.weather.model.Forecast;
 
 import rx.Observable;
 
@@ -15,9 +13,9 @@ import rx.Observable;
 public interface WeatherRepository {
 
     @NonNull
-    Observable<WeatherData> weatherDatas(String city);
+    Observable<CurrentWeather> weatherData(String city);
 
-    Observable<List<OrmWeather>> getForecast(int cityId);
+    Observable<Forecast> getForecast(int cityId);
 
 
 }

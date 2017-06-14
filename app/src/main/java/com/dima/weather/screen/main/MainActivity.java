@@ -2,34 +2,32 @@ package com.dima.weather.screen.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
-import com.dima.weather.App;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.dima.weather.R;
-import com.dima.weather.models.OrmWeather;
-import com.dima.weather.models.WeatherData;
-import com.dima.weather.repository.WeatherRepository;
+import com.dima.weather.model.CurrentWeather;
+import com.dima.weather.model.Forecast;
+import com.dima.weather.screen.base.BaseActivity;
 
-import java.util.List;
-
-import javax.inject.Inject;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ru.arturvasilov.rxloader.LifecycleHandler;
-import ru.arturvasilov.rxloader.LoaderLifecycleHandler;
 
-public class MainActivity extends AppCompatActivity implements MainView{
+public class MainActivity extends BaseActivity implements MainView{
 
-    @BindView(R.id.tv)
-    TextView mTextView;
+    @BindView(R.id.list_data)
+    ListView mListDate;
+    @BindView(R.id.progress)
+    ProgressBar mProgressBar;
 
-    @Inject
-    WeatherRepository mRepository;
-
-    private MainPresenter mMainPresenter;
+    @InjectPresenter
+    MainPresenter mMainPresenter;
 
 
     @Override
@@ -38,32 +36,67 @@ public class MainActivity extends AppCompatActivity implements MainView{
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        App.getAppComponent().injectMainActivity(this);
-        LifecycleHandler lifecycleHandler = LoaderLifecycleHandler.create(this, getSupportLoaderManager());
-        mMainPresenter = new MainPresenter(mRepository, lifecycleHandler, this);
+      //  App.getAppComponent().inject(this);
+
+
       //  mMainPresenter.getWeatherData("Kiev");
-        mMainPresenter.getForecast(2759794);
+        mMainPresenter.getForecast(524901);
     }
 
 
+
+
     @Override
-    public void showWeatherData(@NonNull WeatherData weatherData) {
+    public void showWeatherData(@NonNull CurrentWeather weatherData) {
         Log.d("Tag", weatherData.toString());
 
-        mTextView.setText(weatherData.toString());
+
+
+    //    mListDate.setAdapter(new ArrayAdapter<>());
+
+
+  //      mTextView.setText(weatherData.toString());
     }
 
     @Override
-    public void showOrmWeatherData(@NonNull List<OrmWeather> ormWeather) {
-        Log.d("Tag", ormWeather.toString());
+    public void showOrmWeatherData(@NonNull Forecast forecast ) {
+        Log.d("Tag", forecast.toString());
 
-        mTextView.setText(ormWeather.toString());
+        ArrayList<String> list = new ArrayList<>();
+
+        for (CurrentWeather dayWeather: forecast.getmDayWeathers()){
+            list.add(dayWeather.dtTxt.toString());
+        }
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, list);
+
+        mListDate.setAdapter(adapter);
     }
 
 
     @Override
     public void showError(Throwable throwable) {
         Log.d("Tag", throwable.getMessage().toString());
-   //     mTextView.setText(throwable.getMessage().toString());
+     //   mTextView.setText(throwable.getMessage().toString());
+    }
+
+    @Override
+    public void showErrorss(String error) {
+        Log.d("Tag", error);
+     //   mTextView.setText(error);
+    }
+
+    @Override
+    public void showLoadingIndicator() {
+        super.showLoadingIndicator();
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoadingIndicator() {
+        super.hideLoadingIndicator();
+        mProgressBar.setVisibility(View.GONE);
     }
 }

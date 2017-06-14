@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.dima.weather.BuildConfig;
 import com.dima.weather.api.WeatherService;
-import com.dima.weather.repository.WeatherRepositoryLegacy;
 import com.dima.weather.repository.WeatherRepository;
+import com.dima.weather.repository.WeatherRepositoryLegacy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.inject.Singleton;
 
@@ -37,13 +39,17 @@ public class DataModule {
         return retrofit.create(WeatherService.class);
     }
 
+    Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd HH:mm:ss")
+            .create();
+
     @Provides
     @Singleton
     Retrofit provideRetrofit(@NonNull OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.API_ENDPOINT)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }
