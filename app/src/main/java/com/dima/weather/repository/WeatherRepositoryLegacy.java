@@ -12,7 +12,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * @author Artur Vasilov
+ * Created by Liashenko Dima on 06.04.2017.
  */
 public class WeatherRepositoryLegacy implements WeatherRepository {
 
@@ -48,9 +48,7 @@ public class WeatherRepositoryLegacy implements WeatherRepository {
         return mWeatherService.getForecast(BuildConfig.API_KEY, cityId, "metric")
                 .flatMap(sub -> {
                     return Observable.just(sub);
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                });
     }
 
 }

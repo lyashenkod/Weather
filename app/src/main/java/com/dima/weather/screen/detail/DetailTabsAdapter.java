@@ -1,0 +1,45 @@
+package com.dima.weather.screen.detail;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import com.dima.weather.model.DayWeather;
+import com.dima.weather.screen.detail_day.DayDetailFragment;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Liashenko Dima on 26.06.2017.
+ */
+
+public class DetailTabsAdapter extends FragmentPagerAdapter {
+
+    private int tabCount;
+    ArrayList<DayWeather> mCurrentWeathers;
+
+    DetailTabsAdapter(FragmentManager fm) {
+        super(fm);
+    }
+
+    @Override
+    public int getCount() {
+        return tabCount;
+    }
+
+    @Override
+    public Fragment getItem(int i) {
+        return DayDetailFragment.newInstance(mCurrentWeathers.get(i));
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return String.valueOf(mCurrentWeathers.get(position).getDayWeathers().get(position).dtTxt.getDate());
+    }
+
+    public void setTitles (ArrayList<DayWeather> currentWeathers){
+        this.mCurrentWeathers = currentWeathers;
+        this.tabCount = currentWeathers.size();
+        notifyDataSetChanged();
+    }
+}

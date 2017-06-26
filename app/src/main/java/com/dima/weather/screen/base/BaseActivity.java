@@ -8,7 +8,11 @@ import com.dima.weather.R;
 import com.dima.weather.screen.general.LoadingDialog;
 import com.dima.weather.screen.general.LoadingView;
 
-public class BaseActivity extends MvpAppCompatActivity implements BaseView {
+/**
+ * Created by Liashenko Dima on 19.04.2017.
+ */
+
+public class BaseActivity extends MvpAppCompatActivity implements BaseView{
 
     private LoadingView mLoadingView;
 

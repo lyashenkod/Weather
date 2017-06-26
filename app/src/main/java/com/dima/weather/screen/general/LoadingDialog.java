@@ -20,7 +20,9 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-
+/**
+ * Created by Liashenko Dima on 16.02.2017.
+ */
 
 public class LoadingDialog extends DialogFragment {
     private static final Handler HANDLER = new Handler(Looper.getMainLooper());
