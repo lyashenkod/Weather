@@ -49,6 +49,8 @@
     <dimen name="sliding_menu_item_padding">@dimen/padding_medium</dimen>
     <dimen name="option_menu_item_margin">@dimen/margin_medium</dimen>
 
-
+    <dimen name="app_bar_height">400dp</dimen>
+    <dimen name="title_margin">42dp</dimen>
+    <dimen name="shadow_height">3dp</dimen>
 
 </resources>

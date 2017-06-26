@@ -14,6 +14,8 @@ import com.dima.weather.screen.base.BaseView;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface MainView extends BaseView {
 
+    String SAVE_ORIENTATION = "save_orientation";
+
     void showWeatherData(@NonNull CurrentWeather weatherData);
 
     void showOrmWeatherData(@NonNull Forecast ormWeather);

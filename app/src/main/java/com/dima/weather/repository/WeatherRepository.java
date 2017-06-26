@@ -8,7 +8,7 @@ import com.dima.weather.model.Forecast;
 import rx.Observable;
 
 /**
- * @author Artur Vasilov
+ * Created by Liashenko Dima on 06.04.2017.
  */
 public interface WeatherRepository {
 

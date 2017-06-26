@@ -25,22 +25,12 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void getWeatherData(String city) {
-
         Subscription subscription =  mWeatherRepository.weatherData(city)
                 .doOnSubscribe(getViewState()::showLoadingIndicator)
                 .doAfterTerminate(getViewState()::hideLoadingIndicator)
                 .subscribe(weatherData -> getViewState().showWeatherData(weatherData),
                         throwable ->
                         getViewState().showError(throwable));
-        unsubscribeOnDestroy(subscription);
-    }
-
-    public void getForecast(int cityId){
-        Subscription subscription =   mWeatherRepository.getForecast(cityId)
-                .doOnSubscribe(getViewState()::showLoadingIndicator)
-                .doAfterTerminate(getViewState()::hideLoadingIndicator)
-                .subscribe(getViewState()::showOrmWeatherData,
-                throwable -> getViewState().showError(throwable));
         unsubscribeOnDestroy(subscription);
     }
 
