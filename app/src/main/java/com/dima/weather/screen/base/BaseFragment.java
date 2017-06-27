@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.dima.weather.R;
-import com.dima.weather.screen.ActivityCallback;
 import com.dima.weather.screen.general.LoadingDialog;
 import com.dima.weather.screen.general.LoadingView;
 
@@ -20,9 +19,7 @@ import com.dima.weather.screen.general.LoadingView;
  */
 
 public class BaseFragment extends MvpAppCompatFragment implements BaseView {
-    protected ActivityCallback activityCallback;
     private LoadingView mLoadingView;
-
 
     @Override
     public void onStop() {
@@ -49,12 +46,6 @@ public class BaseFragment extends MvpAppCompatFragment implements BaseView {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            activityCallback = (ActivityCallback) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement activityCallback");
-        }
         mLoadingView = LoadingDialog.view(((AppCompatActivity) getActivity()).getSupportFragmentManager());
 
     }

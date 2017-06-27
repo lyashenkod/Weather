@@ -53,6 +53,8 @@ ext {
     daggerVersion = '2.7'
     javaxAnnotationsVersion = '1.0'
     moxyVersion = '1.5.1'
+    picassoVersion = '2.5.2'
+    picassoDownloaderVersion = '1.0.2'
 }
 
 dependencies {
@@ -91,6 +93,9 @@ dependencies {
     compile "com.arello-mobile:moxy:$moxyVersion"
     compile "com.arello-mobile:moxy-app-compat:$moxyVersion"
     apt "com.arello-mobile:moxy-compiler:$moxyVersion"
+
+    compile "com.squareup.picasso:picasso:$picassoVersion"
+    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:$picassoDownloaderVersion"
 
 
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'

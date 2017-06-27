@@ -19,5 +19,4 @@ public interface DetailView extends BaseView {
 
     void showWeatherData(@NonNull ArrayList<DayWeather> dayWeathers);
 
-
 }

@@ -8,6 +8,8 @@ import com.dima.weather.screen.base.BasePresenter;
 import javax.inject.Inject;
 
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -28,9 +30,10 @@ public class MainPresenter extends BasePresenter<MainView> {
         Subscription subscription =  mWeatherRepository.weatherData(city)
                 .doOnSubscribe(getViewState()::showLoadingIndicator)
                 .doAfterTerminate(getViewState()::hideLoadingIndicator)
-                .subscribe(weatherData -> getViewState().showWeatherData(weatherData),
-                        throwable ->
-                        getViewState().showError(throwable));
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(weatherData -> getViewState().showCurrentWeatherData(weatherData),
+                        throwable -> getViewState().showError(throwable.getMessage()));
         unsubscribeOnDestroy(subscription);
     }
 

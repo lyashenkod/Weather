@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="wind">Ветер: %.2f км/ч</string>
+
+    <string name="temperature_plus">Температура: +%d °C</string>
+    <string name="temperature_minus">Температура: %d °C</string>
+
+    <string name="humidity">Влажность: %.2f</string>
+    <string name="pressure">Давление: %.2f</string>
+
+
+</resources>

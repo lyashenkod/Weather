@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\Fironet\.gradle\caches\modules-2\files-2.1\com.jakewharton.picasso\picasso2-okhttp3-downloader\1.0.2\74a586d03a233d356290983d1ef23a64c1d122b2\picasso2-okhttp3-downloader-1.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="74a586d03a233d356290983d1ef23a64c1d122b2">
+        <dex dex="C:\AndroidProject\MyProject\Weather\Weather\app\build\intermediates\pre-dexed\debug\picasso2-okhttp3-downloader-1.0.2_520596cb561321c7d2b9423a36bd9fdf3c4f4bc9.jar" />
+    </item>
+
+</items>

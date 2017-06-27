@@ -8,8 +8,6 @@ import com.dima.weather.model.CurrentWeather;
 import com.dima.weather.model.Forecast;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Liashenko Dima on 06.04.2017.
@@ -26,7 +24,7 @@ public class WeatherRepositoryLegacy implements WeatherRepository {
     @NonNull
     @Override
     public Observable<CurrentWeather> weatherData(String city) {
-        return mWeatherService.getWeatherData(city, BuildConfig.API_KEY)
+        return mWeatherService.getWeatherData(city, BuildConfig.API_KEY);
 //                .flatMap(weatherData -> {
 //                    Realm.getDefaultInstance().executeTransaction(realm -> {
 //                        realm.delete(CurrentWeather.class);
@@ -39,8 +37,8 @@ public class WeatherRepositoryLegacy implements WeatherRepository {
 //                    WeatherData results = realm.where(WeatherData.class).findFirst();
 //                    return Observable.just(realm.copyFromRealm(results));
 //                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
