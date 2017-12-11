@@ -3,6 +3,7 @@ package com.dima.weather.screen.main;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -31,25 +32,34 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
 
     private boolean appBarState;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault());
-
+    @Nullable
     @BindView(R.id.backdrop)
     ImageView backgroundIV;
+    @Nullable
     @BindView(R.id.header_temp)
     TextView headerTemp;
+    @Nullable
     @BindView(R.id.header_wind)
     TextView headerWind;
+    @Nullable
     @BindView(R.id.header_humidity)
     TextView headerHumidity;
+    @Nullable
     @BindView(R.id.header_pressure)
     TextView headerPressure;
+    @Nullable
     @BindView(R.id.header_date)
     TextView headerDate;
+    @Nullable
     @BindView(R.id.detail_toolbar)
     Toolbar toolbar;
+    @Nullable
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+    @Nullable
     @BindView(R.id.navigation_view)
     NavigationView mNavigationView;
+    @Nullable
     @BindView(R.id.app_bar)
     AppBarLayout mAppBar;
 
@@ -63,7 +73,7 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initToolbar();
-     //   mMainPresenter.getWeatherData("Kiev");
+        //   mMainPresenter.getWeatherData("Kiev");
 
         mAppBar.addOnOffsetChangedListener(this);
         if (savedInstanceState != null) {
@@ -111,7 +121,8 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
 
     @Override
     public void showForecast(@NonNull CurrentWeather currentWeather) {
-            String fileName = currentWeather.weather.get(0).icon + ".jpg";
+        String fileName = currentWeather.weather.get(0).icon + ".jpg";
+        if (backgroundIV != null)
             Picasso.with(backgroundIV.getContext())
                     .load("file:///android_asset/" + fileName)
                     .noFade()
@@ -120,18 +131,23 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
         String temperature = (currentWeather.main.temp > 0 ?
                 getResources().getString(R.string.temp_plus, (int) currentWeather.main.temp) :
                 getResources().getString(R.string.temp_minus, (int) currentWeather.main.temp));
-        headerTemp.setText(temperature);
+        if (headerTemp != null)
+            headerTemp.setText(temperature);
 
         String wind = getResources().getString(R.string.wind, currentWeather.wind.speed);
-        headerWind.setText(wind);
+        if (headerWind != null)
+            headerWind.setText(wind);
 
         String humidityText = getResources().getString(R.string.humidity, currentWeather.main.humidity);
-        headerHumidity.setText(humidityText);
+        if (headerHumidity != null)
+            headerHumidity.setText(humidityText);
 
         String pressureText = getResources().getString(R.string.pressure, currentWeather.main.pressure);
-        headerPressure.setText(pressureText);
+        if (headerPressure != null)
+            headerPressure.setText(pressureText);
 
-        headerDate.setText(dateFormat.format(currentWeather.dtTxt));
+        if (headerPressure != null)
+            headerDate.setText(dateFormat.format(currentWeather.dtTxt));
     }
 
     @Override

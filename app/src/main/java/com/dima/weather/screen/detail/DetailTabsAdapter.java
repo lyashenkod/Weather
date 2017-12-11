@@ -37,7 +37,7 @@ public class DetailTabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return String.valueOf(dayFormat.format(mCurrentWeathers.get(position).getDayWeathers().get(position).dtTxt));
+       return String.valueOf(dayFormat.format(mCurrentWeathers.get(position).getDayWeathers().get(0).dtTxt));
     }
 
     public void setTitles(ArrayList<DayWeather> currentWeathers) {

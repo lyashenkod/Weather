@@ -42,10 +42,10 @@ public class DetailFragment extends BaseFragment implements DetailView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       View view = inflater.inflate(R.layout.fragment_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
         tabLayout = (TabLayout) view.findViewById(R.id.materialup_tabs);
-        viewPager  = (ViewPager) view.findViewById(R.id.materialup_viewpager);
+        viewPager = (ViewPager) view.findViewById(R.id.materialup_viewpager);
         mTabsAdapter = new DetailTabsAdapter(getFragmentManager());
         viewPager.setAdapter(mTabsAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -82,7 +82,7 @@ public class DetailFragment extends BaseFragment implements DetailView {
 
     @Override
     public void showWeatherData(@NonNull ArrayList<DayWeather> dayWeathers) {
-activityCallback.showForecast(dayWeathers.get(0).getDayWeathers().get(0));
+        activityCallback.showForecast(dayWeathers.get(0).getDayWeathers().get(0));
         mTabsAdapter.setTitles(dayWeathers);
     }
 }

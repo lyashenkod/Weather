@@ -40,14 +40,18 @@ android {
         unitTests.all { jvmArgs '-noverify' }
     }
 
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+
 }
 
 ext {
     supportVersion = '25.2.0'
     okhttpVersion = '3.4.1'
-    retrofitVersion = '2.1.0'
-    rxandroidVersion = '1.2.1'
-    rxjavaVersion = '1.1.10'
+    retrofitVersion = '2.2.0'
+    rxandroidVersion = '2.0.1'
+    rxjavaVersion = '2.1.0'
     butterKnifeVersion = '8.3.0'
     hawkVersion = '1.23'
     daggerVersion = '2.7'
@@ -76,10 +80,10 @@ dependencies {
 
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
-    compile "io.reactivex:rxandroid:$rxandroidVersion"
-    compile "io.reactivex:rxjava:$rxjavaVersion"
+    compile "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
 
     compile "com.github.orhanobut:hawk:$hawkVersion"
 

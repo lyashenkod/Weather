@@ -21,4 +21,6 @@ public interface AppComponent {
     void inject(MainPresenter mainPresenter);
 
     void inject(DetailPresenter detailPresenter);
+
+
 }

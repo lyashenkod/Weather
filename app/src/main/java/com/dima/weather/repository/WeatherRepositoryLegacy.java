@@ -7,7 +7,7 @@ import com.dima.weather.api.WeatherService;
 import com.dima.weather.model.CurrentWeather;
 import com.dima.weather.model.Forecast;
 
-import rx.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by Liashenko Dima on 06.04.2017.
@@ -23,7 +23,7 @@ public class WeatherRepositoryLegacy implements WeatherRepository {
 
     @NonNull
     @Override
-    public Observable<CurrentWeather> weatherData(String city) {
+    public Single<CurrentWeather> weatherData(String city) {
         return mWeatherService.getWeatherData(city, BuildConfig.API_KEY);
 //                .flatMap(weatherData -> {
 //                    Realm.getDefaultInstance().executeTransaction(realm -> {
@@ -42,11 +42,8 @@ public class WeatherRepositoryLegacy implements WeatherRepository {
     }
 
 
-    public Observable<Forecast> getForecast(int cityId) {
-        return mWeatherService.getForecast(BuildConfig.API_KEY, cityId, "metric")
-                .flatMap(sub -> {
-                    return Observable.just(sub);
-                });
+    public Single<Forecast> getForecast(int cityId) {
+        return mWeatherService.getForecast(BuildConfig.API_KEY, cityId, "metric");
     }
 
 }

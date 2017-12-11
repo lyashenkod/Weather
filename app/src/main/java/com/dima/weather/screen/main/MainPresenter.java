@@ -7,9 +7,9 @@ import com.dima.weather.screen.base.BasePresenter;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -22,19 +22,19 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Inject
     WeatherRepository mWeatherRepository;
 
-    public MainPresenter( ) {
+    public MainPresenter() {
         App.getAppComponent().inject(this);
     }
 
     public void getWeatherData(String city) {
-        Subscription subscription =  mWeatherRepository.weatherData(city)
-                .doOnSubscribe(getViewState()::showLoadingIndicator)
-                .doAfterTerminate(getViewState()::hideLoadingIndicator)
+        Disposable disposable = mWeatherRepository.weatherData(city)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(getViewState()::hideLoadingIndicator)
                 .subscribe(weatherData -> getViewState().showCurrentWeatherData(weatherData),
                         throwable -> getViewState().showError(throwable.getMessage()));
-        unsubscribeOnDestroy(subscription);
+
+        unsubscribeOnDestroy(disposable);
     }
 
 

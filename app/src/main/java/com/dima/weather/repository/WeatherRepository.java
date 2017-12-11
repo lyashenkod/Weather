@@ -5,17 +5,16 @@ import android.support.annotation.NonNull;
 import com.dima.weather.model.CurrentWeather;
 import com.dima.weather.model.Forecast;
 
-import rx.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by Liashenko Dima on 06.04.2017.
  */
 public interface WeatherRepository {
 
-    @NonNull
-    Observable<CurrentWeather> weatherData(String city);
+    Single<CurrentWeather> weatherData(@NonNull String city);
 
-    Observable<Forecast> getForecast(int cityId);
+    Single<Forecast> getForecast(@NonNull int cityId);
 
 
 }

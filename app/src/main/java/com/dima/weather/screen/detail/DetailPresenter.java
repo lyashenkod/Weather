@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Liashenko Dima on 26.06.2017.
@@ -32,14 +32,13 @@ public class DetailPresenter extends BasePresenter<DetailView> {
 
 
     public void getForecast(int cityId) {
-        Subscription subscription = mWeatherRepository.getForecast(cityId)
-                .doOnSubscribe(getViewState()::showLoadingIndicator)
-                .doAfterTerminate(getViewState()::hideLoadingIndicator)
+        Disposable disposable = mWeatherRepository.getForecast(cityId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(getViewState()::hideLoadingIndicator)
                 .subscribe(this::showWeatherData, throwable -> getViewState().
                         showError(throwable.getMessage()));
-        unsubscribeOnDestroy(subscription);
+        unsubscribeOnDestroy(disposable);
     }
 
 
