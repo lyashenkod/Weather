@@ -1,7 +1,6 @@
 package com.dima.weather.screen.detail;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.dima.weather.App;
 import com.dima.weather.model.CurrentWeather;
 import com.dima.weather.model.DayWeather;
 import com.dima.weather.model.Forecast;
@@ -10,10 +9,7 @@ import com.dima.weather.screen.base.BasePresenter;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -23,22 +19,21 @@ import io.reactivex.schedulers.Schedulers;
 @InjectViewState
 public class DetailPresenter extends BasePresenter<DetailView> {
 
-    @Inject
-    WeatherRepository mWeatherRepository;
+   WeatherRepository mWeatherRepository;
 
-    public DetailPresenter() {
-        App.getAppComponent().inject(this);
+    public DetailPresenter(WeatherRepository weatherRepository) {
+       mWeatherRepository = weatherRepository;
     }
 
 
+
     public void getForecast(int cityId) {
-        Disposable disposable = mWeatherRepository.getForecast(cityId)
+        mWeatherRepository.getForecast(cityId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(getViewState()::hideLoadingIndicator)
                 .subscribe(this::showWeatherData, throwable -> getViewState().
                         showError(throwable.getMessage()));
-        unsubscribeOnDestroy(disposable);
     }
 
 

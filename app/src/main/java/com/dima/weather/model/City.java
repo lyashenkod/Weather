@@ -1,19 +1,16 @@
 
 package com.dima.weather.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Liashenko Dima on 08.04.2017.
  */
-public class City implements Parcelable {
-
+public class City {
     @SerializedName("id")
     @Expose
-    public int id;
+    public Long id;
     @SerializedName("name")
     @Expose
     public String name;
@@ -23,38 +20,62 @@ public class City implements Parcelable {
     @SerializedName("country")
     @Expose
     public String country;
+    @SerializedName("lat")
+    @Expose
+    private Double lat;
+    @SerializedName("lon")
+    @Expose
+    private Double lon;
 
 
-    @Override
-    public int describeContents() {
-        return 0;
+
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
-        dest.writeString(this.name);
-        dest.writeParcelable(this.coord, flags);
-        dest.writeString(this.country);
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Coord getCoord() {
+        return coord;
+    }
+
+    public void setCoord(Coord coord) {
+        this.coord = coord;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLon() {
+        return lon;
+    }
+
+    public void setLon(Double lon) {
+        this.lon = lon;
     }
 
 
-    protected City(Parcel in) {
-        this.id = in.readInt();
-        this.name = in.readString();
-        this.coord = in.readParcelable(Coord.class.getClassLoader());
-        this.country = in.readString();
-    }
-
-    public static final Parcelable.Creator<City> CREATOR = new Parcelable.Creator<City>() {
-        @Override
-        public City createFromParcel(Parcel source) {
-            return new City(source);
-        }
-
-        @Override
-        public City[] newArray(int size) {
-            return new City[size];
-        }
-    };
 }

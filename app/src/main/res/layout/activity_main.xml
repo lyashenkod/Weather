@@ -2,9 +2,9 @@
                                         xmlns:app="http://schemas.android.com/apk/res-auto"
                                         xmlns:tools="http://schemas.android.com/tools"
                                         android:id="@+id/drawer_layout"
-                                        android:fitsSystemWindows="true"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent">
+                                        android:layout_height="match_parent"
+                                        android:fitsSystemWindows="true">
 
 
     <android.support.design.widget.CoordinatorLayout
@@ -25,11 +25,11 @@
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
                 android:clipToPadding="true"
-                app:expandedTitleGravity="right|bottom"
+                android:fitsSystemWindows="true"
                 app:collapsedTitleTextAppearance="@style/about_title"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleGravity="right|bottom"
                 app:expandedTitleMarginBottom="@dimen/title_margin"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                 app:toolbarId="@+id/toolbar"
@@ -54,62 +54,62 @@
                         android:id="@+id/header_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceListItem"
-                        android:textSize="42sp"
-                        android:layout_marginTop="?attr/actionBarSize"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/margin_medium"
                         android:layout_marginLeft="@dimen/margin_medium"
                         android:layout_marginRight="@dimen/margin_medium"
-                        android:layout_marginBottom="@dimen/margin_medium"
-                        android:layout_alignParentRight="true"
-                        tools:ignore="InconsistentLayout" />
+                        android:layout_marginTop="?attr/actionBarSize"
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textSize="42sp"
+                        tools:ignore="InconsistentLayout"/>
 
                     <TextView
                         android:id="@+id/header_wind"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/header_temp"
+                        android:layout_marginBottom="@dimen/margin_medium"
                         android:layout_marginLeft="@dimen/margin_medium"
                         android:layout_marginRight="@dimen/margin_medium"
-                        android:layout_marginBottom="@dimen/margin_medium"
-                        android:layout_below="@+id/header_temp"
-                        android:layout_alignParentRight="true"
-                        tools:ignore="InconsistentLayout" />
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        tools:ignore="InconsistentLayout"/>
 
                     <TextView
                         android:id="@+id/header_humidity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/header_wind"
+                        android:layout_marginBottom="@dimen/margin_medium"
                         android:layout_marginLeft="@dimen/margin_medium"
                         android:layout_marginRight="@dimen/margin_medium"
-                        android:layout_marginBottom="@dimen/margin_medium"
-                        android:layout_below="@+id/header_wind"
-                        android:layout_alignParentRight="true"
-                        tools:ignore="InconsistentLayout" />
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        tools:ignore="InconsistentLayout"/>
 
                     <TextView
                         android:id="@+id/header_pressure"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/header_humidity"
+                        android:layout_marginBottom="@dimen/margin_medium"
                         android:layout_marginLeft="@dimen/margin_medium"
                         android:layout_marginRight="@dimen/margin_medium"
-                        android:layout_marginBottom="@dimen/margin_medium"
-                        android:layout_below="@+id/header_humidity"
-                        android:layout_alignParentRight="true"
-                        tools:ignore="InconsistentLayout" />
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        tools:ignore="InconsistentLayout"/>
 
                     <TextView
                         android:id="@+id/header_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
                         android:layout_marginLeft="@dimen/margin_medium"
                         android:layout_marginRight="@dimen/margin_medium"
                         android:paddingBottom="@dimen/margin_medium"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        tools:ignore="InconsistentLayout" />
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        tools:ignore="InconsistentLayout"/>
                 </RelativeLayout>
 
                 <android.support.v7.widget.Toolbar
@@ -138,13 +138,38 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
+        style="@style/BackgroundViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/red"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:headerLayout="@layout/navigation_header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/drawer_header_height"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/small"
+                android:layout_marginRight="@dimen/small"
+                android:background="@drawable/button_search"
+                android:drawableLeft="@android:drawable/ic_menu_search"
+                android:text="@string/search_button_text"
+                android:textAllCaps="false"
+                />
+
+            <com.woxthebox.draglistview.DragListView
+                android:id="@+id/drag_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+
+    </android.support.design.widget.NavigationView>
 
 
 </android.support.v4.widget.DrawerLayout>

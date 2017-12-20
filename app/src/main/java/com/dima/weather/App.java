@@ -4,9 +4,9 @@ package com.dima.weather;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.dima.weather.di.AppComponent;
-import com.dima.weather.di.DaggerAppComponent;
-import com.dima.weather.di.DataModule;
+import com.dima.weather.di.components.AppComponent;
+import com.dima.weather.di.components.DaggerAppComponent;
+import com.dima.weather.di.modules.DataModule;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -27,7 +27,8 @@ public class App extends Application {
 //                .setLogLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE)
 //                .build();
 
-        RealmConfiguration configuration = new RealmConfiguration.Builder(this)
+        Realm.init(this);
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .rxFactory(new RealmObservableFactory())
                 .build();
         Realm.setDefaultConfiguration(configuration);

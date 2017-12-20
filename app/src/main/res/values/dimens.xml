@@ -14,7 +14,6 @@
     <dimen name="activity_margin_horizontal">@dimen/medium</dimen>
     <dimen name="activity_margin_vertical">@dimen/medium</dimen>
     <dimen name="nav_header_vertical_spacing">@dimen/medium</dimen>
-    <dimen name="nav_header_height">160dp</dimen>
     <dimen name="space_between_views">12dp</dimen>
     <dimen name="space_between_views_half">6dp</dimen>
     <dimen name="space_between_views_double">24dp</dimen>
@@ -52,5 +51,11 @@
     <dimen name="app_bar_height">400dp</dimen>
     <dimen name="title_margin">42dp</dimen>
     <dimen name="shadow_height">3dp</dimen>
+
+
+    <!--Navigation-->
+    <dimen name="list_text_size">16sp</dimen>
+    <dimen name="list_item_height">48dip</dimen>
+    <dimen name="drawer_header_height">160dip</dimen>
 
 </resources>

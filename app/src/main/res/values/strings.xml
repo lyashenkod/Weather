@@ -12,16 +12,13 @@
 
 	<string name="view_navigation_open"> Open </string>
 	<string name="view_navigation_close"> Close </string>
-
-
 	<string name="temp_plus" translatable="false">+%d °C</string>
 	<string name="temp_minus" translatable="false">%d °C</string>
-
 	<string name="wind">Wind: %.2f km/h</string>
 	<string name="temperature_plus">Temperature: +%d °C</string>
 	<string name="temperature_minus">Temperature: %d °C</string>
 	<string name="humidity">Humidity: %.2f</string>
 	<string name="pressure">Pressure: %.2f</string>
-
+	<string name="search_button_text">Search locations</string>
 
 </resources>

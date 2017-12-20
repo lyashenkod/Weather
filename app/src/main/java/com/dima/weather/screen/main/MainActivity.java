@@ -1,5 +1,6 @@
 package com.dima.weather.screen.main;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,22 +8,33 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.dima.weather.App;
 import com.dima.weather.R;
 import com.dima.weather.model.CurrentWeather;
+import com.dima.weather.repository.WeatherRepository;
 import com.dima.weather.screen.ActivityCallback;
+import com.dima.weather.screen.ViewHelper;
 import com.dima.weather.screen.base.BaseActivity;
 import com.dima.weather.screen.detail.DetailFragment;
-import com.squareup.picasso.Picasso;
+import com.woxthebox.draglistview.DragItem;
+import com.woxthebox.draglistview.DragListView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +44,7 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
 
     private boolean appBarState;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault());
+
     @Nullable
     @BindView(R.id.backdrop)
     ImageView backgroundIV;
@@ -56,16 +69,24 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
     @Nullable
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @Nullable
-    @BindView(R.id.navigation_view)
-    NavigationView mNavigationView;
-    @Nullable
     @BindView(R.id.app_bar)
     AppBarLayout mAppBar;
+    @BindView(R.id.navigation_view)
+    NavigationView mNavigationView;
+    @BindView(R.id.drag_list_view)
+    DragListView mDynamicListView;
 
+
+    @Inject
+    WeatherRepository mWeatherRepository;
     @InjectPresenter
     MainPresenter mMainPresenter;
 
+    @ProvidePresenter
+    MainPresenter providePresenter() {
+        App.getAppComponent().inject(this);
+        return new MainPresenter(mWeatherRepository);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +95,9 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
         ButterKnife.bind(this);
         initToolbar();
         //   mMainPresenter.getWeatherData("Kiev");
+
+        initNavigation();
+
 
         mAppBar.addOnOffsetChangedListener(this);
         if (savedInstanceState != null) {
@@ -87,8 +111,6 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
                     .add(R.id.city_detail_container, fragment)
                     .commit();
         }
-
-
     }
 
     @Override
@@ -104,6 +126,21 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
         toggle.syncState();
         setToolbarTitle("Kiev");
     }
+
+    private void initNavigation() {
+        ArrayList<Pair<Long, String>> mItemArray;
+        mItemArray = new ArrayList<>();
+        for (int i = 0; i < 40; i++) {
+            mItemArray.add(new Pair<>((long) i, "Item " + i));
+        }
+        mDynamicListView.setLayoutManager(new LinearLayoutManager(this));
+        NavigationDrawerAdapter listAdapter = new NavigationDrawerAdapter(mItemArray, R.layout.navigation_list_item, R.id.image, false);
+        mDynamicListView.setAdapter(listAdapter, true);
+        mDynamicListView.setCanDragHorizontally(false);
+        mDynamicListView.setCustomDragItem(new MyDragItem(this, R.layout.navigation_list_item));
+    }
+
+
 
 
     @Override
@@ -123,10 +160,7 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
     public void showForecast(@NonNull CurrentWeather currentWeather) {
         String fileName = currentWeather.weather.get(0).icon + ".jpg";
         if (backgroundIV != null)
-            Picasso.with(backgroundIV.getContext())
-                    .load("file:///android_asset/" + fileName)
-                    .noFade()
-                    .into(backgroundIV);
+            ViewHelper.setAssetImageFile(fileName, backgroundIV);
 
         String temperature = (currentWeather.main.temp > 0 ?
                 getResources().getString(R.string.temp_plus, (int) currentWeather.main.temp) :
@@ -148,7 +182,18 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
 
         if (headerPressure != null)
             headerDate.setText(dateFormat.format(currentWeather.dtTxt));
+
+        initNavigationData(currentWeather);
+
     }
+
+    private void initNavigationData(@NonNull CurrentWeather currentWeather) {
+        View headerLayout = mNavigationView.inflateHeaderView(R.layout.navigation_header);
+        ImageView headerBackground = ButterKnife.findById(headerLayout, R.id.navigation_header_background);
+        String fileName = currentWeather.weather.get(0).icon + ".jpg";
+        ViewHelper.setAssetImageFile(fileName, headerBackground);
+    }
+
 
     @Override
     public void showCurrentWeatherData(@NonNull CurrentWeather weatherData) {
@@ -162,5 +207,17 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
             appBarState = false;
     }
 
+    private static class MyDragItem extends DragItem {
 
+        MyDragItem(Context context, int layoutId) {
+            super(context, layoutId);
+        }
+
+        @Override
+        public void onBindDragView(View clickedView, View dragView) {
+            CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
+            ((TextView) dragView.findViewById(R.id.text)).setText(text);
+            dragView.findViewById(R.id.item_layout).setBackgroundColor(dragView.getResources().getColor(R.color.colorPrimary));
+        }
+    }
 }

@@ -2,7 +2,7 @@
 <resources>
 
     <!--Base colors-->
-    <color name="colorPrimary">@color/light_blue</color>
+    <color name="colorPrimary">@color/blue</color>
     <color name="colorPrimaryDark">@color/dark_blue</color>
     <item name="transparent" type="color">#00000000</item>
     <item name="half_transparent" type="color">#88000000</item>
@@ -16,7 +16,8 @@
     <item name="yellow" type="color">#ffffba16</item>
     <item name="orange" type="color">#fff7941d</item>
     <item name="green" type="color">#ff79b03e</item>
-    <item name="light_blue" type="color">#ADDFFF</item>
+    <item name="blue" type="color">#ADDFFF</item>
+    <item name="light_blue" type="color">#FDFFFF</item>
     <item name="dark_blue" type="color">#5385A5</item>
     <item name="heading_blue" type="color">#ff1c3a54</item>
     <item name="grey_transparent" type="color">#30292727</item>

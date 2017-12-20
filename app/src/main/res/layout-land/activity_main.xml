@@ -47,8 +47,15 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:background="@color/red"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:headerLayout="@layout/navigation_header">
+
+
+        <com.woxthebox.draglistview.DragListView
+            android:id="@+id/drag_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </android.support.design.widget.NavigationView>
 
 
 </android.support.v4.widget.DrawerLayout>

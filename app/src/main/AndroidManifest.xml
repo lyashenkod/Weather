@@ -22,8 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".screen.base.BaseActivity">
-        </activity>
+        <activity android:name=".screen.base.BaseActivity"/>
+        <activity
+            android:name=".screen.city.AddCityActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
