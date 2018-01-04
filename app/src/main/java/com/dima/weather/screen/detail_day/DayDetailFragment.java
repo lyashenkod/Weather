@@ -30,7 +30,6 @@ public class DayDetailFragment extends BaseFragment {
     @Inject
     Gson mGson;
 
-
     public static Fragment newInstance(DayWeather dayWeather) {
         Bundle args = new Bundle();
         args.putString(CURRENT_WEATHER_DATA_KEY, new Gson().toJson(dayWeather));

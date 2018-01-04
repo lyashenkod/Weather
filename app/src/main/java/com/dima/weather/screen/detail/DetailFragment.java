@@ -101,7 +101,7 @@ public class DetailFragment extends BaseFragment implements DetailView {
 
     @Override
     public void showWeatherData(@NonNull ArrayList<DayWeather> dayWeathers) {
-        activityCallback.showForecast(dayWeathers.get(0).getDayWeathers().get(0));
+ //       activityCallback.showForecast(dayWeathers.get(0).getDayWeathers().get(0));
         mTabsAdapter.setTitles(dayWeathers);
     }
 }

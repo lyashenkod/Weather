@@ -4,12 +4,15 @@ package com.dima.weather.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.Date;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
 /**
  * Created by Liashenko Dima on 08.04.2017.
  */
-public class CurrentWeather  {
+public class CurrentWeather  extends RealmObject {
 
     @SerializedName("id")
     @Expose
@@ -34,7 +37,7 @@ public class CurrentWeather  {
     public Main main;
     @SerializedName("weather")
     @Expose
-    public ArrayList<Weather> weather = null;
+    public RealmList<Weather> weather = null;
     @SerializedName("clouds")
     @Expose
     public Clouds clouds;

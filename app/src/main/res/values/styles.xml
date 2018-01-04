@@ -1,26 +1,16 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
-    <!--</style>-->
-
 
     <!--ToolbarStyle-->
     <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/white</item>
-        <item name="android:background">@color/light_black</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:gravity">top</item>
     </style>
 
     <!-- NavigationViewStyle-->
     <style name="NavigationViewStyle">
-      <!--  <item name="listPreferredItemHeightSmall">40dp</item>
-        <item name="android:listDivider"> @android:color/transparent </item>-->
+        <!--  <item name="listPreferredItemHeightSmall">40dp</item>
+          <item name="android:listDivider"> @android:color/transparent </item>-->
         <item name="android:background">@color/light_blue</item>
     </style>
 
@@ -30,10 +20,9 @@
     </style>
 
 
-    <style name="about_title">
-        <item name="android:gravity">top</item>
+
+
+    <style name="TextNormal">
+        <item name="android:textColor">@color/grey</item>
     </style>
-
-
-
 </resources>

@@ -18,5 +18,4 @@ public interface BaseView extends MvpView {
 
     void hideLoadingIndicator();
 
-
 }

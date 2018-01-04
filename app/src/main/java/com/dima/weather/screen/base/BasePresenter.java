@@ -28,4 +28,8 @@ public class BasePresenter<View extends MvpView> extends MvpPresenter<View> {
     }
 
 
+    public void unsubscribe() {
+        mCompositeDisposable.dispose();
+    }
+
 }

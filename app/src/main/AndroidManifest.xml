@@ -25,6 +25,7 @@
         <activity android:name=".screen.base.BaseActivity"/>
         <activity
             android:name=".screen.city.AddCityActivity"
+            android:label="@string/add_city_title"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

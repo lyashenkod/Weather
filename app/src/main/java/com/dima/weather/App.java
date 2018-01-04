@@ -21,12 +21,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-//        Hawk.init(this)
-//                .setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
-//                .setStorage(HawkBuilder.newSharedPrefStorage(this))
-//                .setLogLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE)
-//                .build();
-
         Realm.init(this);
         RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .rxFactory(new RealmObservableFactory())
@@ -34,7 +28,7 @@ public class App extends Application {
         Realm.setDefaultConfiguration(configuration);
 
         sAppComponent = DaggerAppComponent.builder()
-                .dataModule(new DataModule())
+                .dataModule(new DataModule(this))
                 .build();
     }
 

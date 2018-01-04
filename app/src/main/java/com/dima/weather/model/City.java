@@ -4,29 +4,32 @@ package com.dima.weather.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Liashenko Dima on 08.04.2017.
  */
-public class City {
+public class City extends RealmObject {
+    @PrimaryKey
     @SerializedName("id")
     @Expose
-    public Long id;
+    private Long id;
     @SerializedName("name")
     @Expose
-    public String name;
+    private String name;
     @SerializedName("coord")
     @Expose
-    public Coord coord;
+    private Coord coord;
     @SerializedName("country")
     @Expose
-    public String country;
+    private String country;
     @SerializedName("lat")
     @Expose
     private Double lat;
     @SerializedName("lon")
     @Expose
     private Double lon;
-
 
 
     public Long getId() {

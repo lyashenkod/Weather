@@ -1,6 +1,7 @@
 package com.dima.weather.screen.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,10 +24,12 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.dima.weather.App;
 import com.dima.weather.R;
 import com.dima.weather.model.CurrentWeather;
+import com.dima.weather.repository.LocaleRepository;
 import com.dima.weather.repository.WeatherRepository;
 import com.dima.weather.screen.ActivityCallback;
 import com.dima.weather.screen.ViewHelper;
 import com.dima.weather.screen.base.BaseActivity;
+import com.dima.weather.screen.city.AddCityActivity;
 import com.dima.weather.screen.detail.DetailFragment;
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
@@ -40,7 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements MainView, ActivityCallback,
-        AppBarLayout.OnOffsetChangedListener {
+        AppBarLayout.OnOffsetChangedListener, NavigationDrawerAdapter.OnItemClickListener {
 
     private boolean appBarState;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault());
@@ -75,17 +79,24 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
     NavigationView mNavigationView;
     @BindView(R.id.drag_list_view)
     DragListView mDynamicListView;
+    @BindView(R.id.search_button)
+    Button mSearchButton;
 
-
+    @Inject
+    LocaleRepository mLocaleRepository;
     @Inject
     WeatherRepository mWeatherRepository;
     @InjectPresenter
     MainPresenter mMainPresenter;
 
+
+    private NavigationDrawerAdapter listAdapter;
+
+
     @ProvidePresenter
     MainPresenter providePresenter() {
         App.getAppComponent().inject(this);
-        return new MainPresenter(mWeatherRepository);
+        return new MainPresenter(mWeatherRepository, mLocaleRepository);
     }
 
     @Override
@@ -103,6 +114,8 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
         if (savedInstanceState != null) {
             appBarState = savedInstanceState.getBoolean(SAVE_ORIENTATION);
             mAppBar.setExpanded(appBarState);
+            if (toolbar != null)
+                toolbar.setTitle(savedInstanceState.getString(SAVE_TITLE));
         }
 
         if (savedInstanceState == null) {
@@ -111,12 +124,22 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
                     .add(R.id.city_detail_container, fragment)
                     .commit();
         }
+
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AddCityActivity.class));
+            }
+        });
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVE_ORIENTATION, appBarState);
+        if (toolbar != null)
+            outState.putString(SAVE_TITLE, toolbar.getTitle().toString());
+
     }
 
     private void initToolbar() {
@@ -124,23 +147,38 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
                 toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-        setToolbarTitle("Kiev");
+
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        providePresenter().closeRealm();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMainPresenter.getAllCities();
     }
 
     private void initNavigation() {
-        ArrayList<Pair<Long, String>> mItemArray;
-        mItemArray = new ArrayList<>();
-        for (int i = 0; i < 40; i++) {
-            mItemArray.add(new Pair<>((long) i, "Item " + i));
-        }
         mDynamicListView.setLayoutManager(new LinearLayoutManager(this));
-        NavigationDrawerAdapter listAdapter = new NavigationDrawerAdapter(mItemArray, R.layout.navigation_list_item, R.id.image, false);
-        mDynamicListView.setAdapter(listAdapter, true);
         mDynamicListView.setCanDragHorizontally(false);
         mDynamicListView.setCustomDragItem(new MyDragItem(this, R.layout.navigation_list_item));
+        listAdapter = new NavigationDrawerAdapter(new ArrayList<>(), R.layout.navigation_list_item, R.id.image,
+                false, this);
+        mDynamicListView.setAdapter(listAdapter, true);
+
+
     }
 
-
+    @Override
+    public void setItemList(ArrayList<Pair<Long, String>> itemList) {
+        listAdapter.setItemList(itemList);
+    }
 
 
     @Override
@@ -196,7 +234,35 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
 
 
     @Override
-    public void showCurrentWeatherData(@NonNull CurrentWeather weatherData) {
+    public void showCurrentWeatherData(@NonNull CurrentWeather currentWeather) {
+
+        String fileName = currentWeather.weather.get(0).icon + ".jpg";
+        if (backgroundIV != null)
+            ViewHelper.setAssetImageFile(fileName, backgroundIV);
+
+        String temperature = (currentWeather.main.temp > 0 ?
+                getResources().getString(R.string.temp_plus, (int) currentWeather.main.temp) :
+                getResources().getString(R.string.temp_minus, (int) currentWeather.main.temp));
+        if (headerTemp != null)
+            headerTemp.setText(temperature);
+
+        String wind = getResources().getString(R.string.wind, currentWeather.wind.speed);
+        if (headerWind != null)
+            headerWind.setText(wind);
+
+        String humidityText = getResources().getString(R.string.humidity, currentWeather.main.humidity);
+        if (headerHumidity != null)
+            headerHumidity.setText(humidityText);
+
+        String pressureText = getResources().getString(R.string.pressure, currentWeather.main.pressure);
+        if (headerPressure != null)
+            headerPressure.setText(pressureText);
+
+
+//        if (headerPressure != null)
+//            headerDate.setText(dateFormat.format(currentWeather.dtTxt));
+
+
     }
 
     @Override
@@ -207,8 +273,14 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
             appBarState = false;
     }
 
-    private static class MyDragItem extends DragItem {
+    @Override
+    public void onClick(String cityName) {
+        mMainPresenter.getWeatherData(cityName);
+        mDrawerLayout.closeDrawers();
+        setToolbarTitle(cityName);
+    }
 
+    private static class MyDragItem extends DragItem {
         MyDragItem(Context context, int layoutId) {
             super(context, layoutId);
         }

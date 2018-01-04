@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.dima.weather"
         minSdkVersion 17
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
 
         buildConfigField "String", "API_ENDPOINT", '"http://api.openweathermap.org"'
@@ -48,13 +48,12 @@ android {
 }
 
 ext {
-    supportVersion = '25.4.0'
+    supportVersion = '26.0.1'
     okhttpVersion = '3.4.1'
     retrofitVersion = '2.2.0'
     rxandroidVersion = '2.0.1'
     rxjavaVersion = '2.1.0'
     butterKnifeVersion = '8.3.0'
-    hawkVersion = '1.23'
     daggerVersion = '2.11'
     javaxAnnotationsVersion = '1.0'
     moxyVersion = '1.5.1'
@@ -88,7 +87,7 @@ dependencies {
     compile "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
     compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
 
-    compile "com.github.orhanobut:hawk:$hawkVersion"
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 
     compile "com.jakewharton:butterknife:$butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
@@ -108,7 +107,6 @@ dependencies {
 
     compile "com.squareup.picasso:picasso:$picassoVersion"
     compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:$picassoDownloaderVersion"
-
 
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
 

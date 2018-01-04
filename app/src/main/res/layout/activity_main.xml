@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="true"
                 android:fitsSystemWindows="true"
-                app:collapsedTitleTextAppearance="@style/about_title"
+                app:collapsedTitleTextAppearance="@style/ToolbarStyle"
                 app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleGravity="right|bottom"
                 app:expandedTitleMarginBottom="@dimen/title_margin"
@@ -152,6 +152,7 @@
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/search_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/small"
@@ -167,9 +168,5 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
-
-
     </android.support.design.widget.NavigationView>
-
-
 </android.support.v4.widget.DrawerLayout>

@@ -1,5 +1,7 @@
 package com.dima.weather.screen.detail;
 
+import android.annotation.SuppressLint;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.dima.weather.model.CurrentWeather;
 import com.dima.weather.model.DayWeather;
@@ -27,10 +29,12 @@ public class DetailPresenter extends BasePresenter<DetailView> {
 
 
 
+    @SuppressLint("RxLeakedSubscription")
     public void getForecast(int cityId) {
         mWeatherRepository.getForecast(cityId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> getViewState().showLoadingIndicator())
                 .doAfterTerminate(getViewState()::hideLoadingIndicator)
                 .subscribe(this::showWeatherData, throwable -> getViewState().
                         showError(throwable.getMessage()));

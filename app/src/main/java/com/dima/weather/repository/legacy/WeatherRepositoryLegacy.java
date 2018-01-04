@@ -26,25 +26,21 @@ public class WeatherRepositoryLegacy implements WeatherRepository {
     @Override
     public Single<CurrentWeather> weatherData(String city) {
         return mWeatherService.getWeatherData(city, BuildConfig.API_KEY);
-//                .flatMap(weatherData -> {
-//                    Realm.getDefaultInstance().executeTransaction(realm -> {
-//                        realm.delete(CurrentWeather.class);
-//                        realm.copyToRealmOrUpdate(weatherData);
-//                    });
-//                    return Observable.just(weatherData);
-//                })
-//                .onErrorResumeNext(throwable -> {
-//                    Realm realm = Realm.getDefaultInstance();
-//                    WeatherData results = realm.where(WeatherData.class).findFirst();
-//                    return Observable.just(realm.copyFromRealm(results));
-//                })
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public Single<Forecast> getForecast(int cityId) {
         return mWeatherService.getForecast(BuildConfig.API_KEY, cityId, "metric");
+
+
     }
+
+//    private Forecast getForecastFromRealm() {
+//        Realm mRealm = Realm.getDefaultInstance();
+//        Forecast forecastObject = mRealm.copyFromRealm(mRealm.where(Forecast.class).findFirst());
+//        mRealm.close();
+//        return forecastObject;
+//    }
+
 
 }

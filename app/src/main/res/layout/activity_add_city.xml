@@ -2,9 +2,79 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  android:fitsSystemWindows="true">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:theme="@style/ToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
 
+    </android.support.design.widget.AppBarLayout>
 
+    <RelativeLayout
+        style="@style/BackgroundViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/progress_bar"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginLeft="@dimen/medium"
+            android:layout_marginRight="@dimen/medium"
+            android:singleLine="true"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/city_search_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/small"
+            android:layout_below="@+id/edit_text"/>
+
+        <LinearLayout
+            android:id="@+id/background_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/background_image_height"
+                android:src="@drawable/city_background"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/small"
+                android:text="@string/start_typing"
+                android:textColor="@color/dark_blue"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:indeterminateTint="@color/blue"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:visibility="invisible"
+        android:indeterminate="true"/>
 </android.support.design.widget.CoordinatorLayout>

@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dima.weather.R;
 import com.woxthebox.draglistview.DragItemAdapter;
@@ -33,13 +32,18 @@ class NavigationDrawerAdapter extends DragItemAdapter<Pair<Long, String>, Naviga
     private int mLayoutId;
     private int mGrabHandleId;
     private boolean mDragOnLongPress;
+    private OnItemClickListener mOnItemClickListener;
 
-    NavigationDrawerAdapter(ArrayList<Pair<Long, String>> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
-        mLayoutId = layoutId;
-        mGrabHandleId = grabHandleId;
-        mDragOnLongPress = dragOnLongPress;
+
+    NavigationDrawerAdapter(ArrayList<Pair<Long, String>> list, int layoutId, int grabHandleId,
+                            boolean dragOnLongPress, OnItemClickListener onItemClickListener) {
+        this.mLayoutId = layoutId;
+        this.mGrabHandleId = grabHandleId;
+        this.mDragOnLongPress = dragOnLongPress;
+        this.mOnItemClickListener = onItemClickListener;
         setItemList(list);
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,9 +54,14 @@ class NavigationDrawerAdapter extends DragItemAdapter<Pair<Long, String>, Naviga
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        String text = mItemList.get(position).second;
+        String text = getItemList().get(position).second;
+        holder.click(text, mOnItemClickListener);
         holder.mText.setText(text);
         holder.itemView.setTag(mItemList.get(position));
+    }
+
+    public interface OnItemClickListener {
+        void onClick(String cityName);
     }
 
     @Override
@@ -68,15 +77,9 @@ class NavigationDrawerAdapter extends DragItemAdapter<Pair<Long, String>, Naviga
             mText = (TextView) itemView.findViewById(R.id.text);
         }
 
-        @Override
-        public void onItemClicked(View view) {
-            Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+        public void click(final String city, final OnItemClickListener listener) {
+            itemView.setOnClickListener(view -> listener.onClick(city));
         }
 
-        @Override
-        public boolean onItemLongClicked(View view) {
-            Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
-            return true;
-        }
     }
 }

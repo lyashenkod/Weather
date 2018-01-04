@@ -2,13 +2,19 @@ package com.dima.weather.repository;
 
 import com.dima.weather.model.City;
 
-import io.reactivex.Observable;
+import java.util.List;
+
+import io.reactivex.Single;
 
 
-/**
- * Created by ishabaev on 21.07.16.
- */
 public interface LocaleRepository {
 
-    Observable<City> searchCity(String cityName);
+
+    Single saveCity(City city);
+
+    Single<List<City>> findAllCities();
+
+    Single delete(City realmCity);
+
+    void closeRealm();
 }
