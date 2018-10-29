@@ -2,7 +2,7 @@ package com.dima.weather.repository;
 
 import android.support.annotation.NonNull;
 
-import com.dima.weather.model.CurrentWeather;
+import com.dima.weather.api.data.CurrentWeatherResponse;
 import com.dima.weather.model.Forecast;
 
 import io.reactivex.Single;
@@ -12,9 +12,9 @@ import io.reactivex.Single;
  */
 public interface WeatherRepository {
 
-    Single<CurrentWeather> weatherData(@NonNull String city);
+    Single<CurrentWeatherResponse> weatherData(@NonNull String city);
 
-    Single<Forecast> getForecast(@NonNull int cityId);
+    Single<Forecast> getForecast(@NonNull String city);
 
 
 }

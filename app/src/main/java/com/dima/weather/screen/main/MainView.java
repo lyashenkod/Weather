@@ -17,9 +17,11 @@ import java.util.ArrayList;
 public interface MainView extends BaseView {
 
     String SAVE_ORIENTATION = "save_orientation";
-    String SAVE_TITLE = "save_title";
 
-    void showCurrentWeatherData(@NonNull CurrentWeather weatherData);
 
-    void setItemList(ArrayList<Pair<Long, String>> itemList);
+    void showCurrentWeatherData(@NonNull String city, @NonNull CurrentWeather weatherData);
+
+    void getForecast(@NonNull String city);
+
+    void showNavigationCityList(ArrayList<Pair<Long, String>> itemList);
 }

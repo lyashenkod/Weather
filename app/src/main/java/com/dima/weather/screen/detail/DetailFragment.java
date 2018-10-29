@@ -15,9 +15,12 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.dima.weather.App;
 import com.dima.weather.R;
 import com.dima.weather.model.DayWeather;
+import com.dima.weather.repository.LocaleRepository;
 import com.dima.weather.repository.WeatherRepository;
 import com.dima.weather.screen.ActivityCallback;
+import com.dima.weather.screen.FragmentCallback;
 import com.dima.weather.screen.base.BaseFragment;
+import com.dima.weather.screen.main.MainActivity;
 
 import java.util.ArrayList;
 
@@ -30,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by Liashenko Dima on 22.06.2017.
  */
 
-public class DetailFragment extends BaseFragment implements DetailView {
+public class DetailFragment extends BaseFragment implements DetailView, FragmentCallback {
 
     @BindView(R.id.tab_view)
     TabLayout tabLayout;
@@ -40,25 +43,19 @@ public class DetailFragment extends BaseFragment implements DetailView {
     private ActivityCallback activityCallback;
     private DetailTabsAdapter mTabsAdapter;
 
-
     @Inject
     WeatherRepository mWeatherRepository;
+    @Inject
+    LocaleRepository mLocaleRepository;
+
     @InjectPresenter
     DetailPresenter mDetailPresenter;
-
-
-    public static DetailFragment newInstance() {
-        Bundle args = new Bundle();
-        DetailFragment cityDetailFragment = new DetailFragment();
-        cityDetailFragment.setArguments(args);
-        return cityDetailFragment;
-    }
 
 
     @ProvidePresenter
     DetailPresenter providePresenter() {
         App.getAppComponent().inject(this);
-        return new DetailPresenter(mWeatherRepository);
+        return new DetailPresenter(mWeatherRepository, mLocaleRepository);
     }
 
     @Nullable
@@ -66,16 +63,12 @@ public class DetailFragment extends BaseFragment implements DetailView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
-
-        mTabsAdapter = new DetailTabsAdapter(getFragmentManager());
-        viewPager.setAdapter(mTabsAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-
-        mDetailPresenter.getForecast(524901);
         return view;
     }
 
-    public void loadContent() {
+    @Override
+    public void getForecast(String city) {
+        mDetailPresenter.getForecast(city);
     }
 
     public void clearContent() {
@@ -87,6 +80,8 @@ public class DetailFragment extends BaseFragment implements DetailView {
         super.onAttach(activity);
         try {
             activityCallback = (ActivityCallback) getActivity();
+            MainActivity mainActivity = (MainActivity) activity;
+            mainActivity.getFragmentCallback(this);
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement activityCallback");
@@ -101,7 +96,10 @@ public class DetailFragment extends BaseFragment implements DetailView {
 
     @Override
     public void showWeatherData(@NonNull ArrayList<DayWeather> dayWeathers) {
- //       activityCallback.showForecast(dayWeathers.get(0).getDayWeathers().get(0));
+        // activityCallback.showForecast(dayWeathers.get(0).getDayWeathers().get(0));
+        mTabsAdapter = new DetailTabsAdapter(getFragmentManager());
+        viewPager.setAdapter(mTabsAdapter);
+        tabLayout.setupWithViewPager(viewPager);
         mTabsAdapter.setTitles(dayWeathers);
     }
 }

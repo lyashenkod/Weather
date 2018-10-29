@@ -1,9 +1,10 @@
 package com.dima.weather.screen.city;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -17,6 +18,7 @@ import com.dima.weather.model.City;
 import com.dima.weather.repository.FileSourceRepository;
 import com.dima.weather.repository.LocaleRepository;
 import com.dima.weather.screen.base.BaseActivity;
+import com.dima.weather.screen.main.MainActivity;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.ArrayList;
@@ -41,21 +43,31 @@ public class AddCityActivity extends BaseActivity implements CityView, AddCityVi
     RecyclerView mSearchState;
     @BindView(R.id.background_container)
     LinearLayout mBackgroundContainer;
+
     @Inject
     FileSourceRepository mFileSourceRepository;
     @Inject
     LocaleRepository mLocaleRepository;
+
     @InjectPresenter
     CityPresenter mCityPresenter;
 
     private AddCityViewAdapter myAdapter;
     private Disposable searchSubscription;
 
+
+    public static Intent buildIntent(Context context) {
+        Intent intent = new Intent(context, AddCityActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        return intent;
+    }
+
     @ProvidePresenter
     CityPresenter providePresenter() {
         App.getAppComponent().inject(this);
         return new CityPresenter(mFileSourceRepository, mLocaleRepository);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +79,7 @@ public class AddCityActivity extends BaseActivity implements CityView, AddCityVi
         mSearchState.setLayoutManager(new LinearLayoutManager(this));
         mSearchState.setAdapter(myAdapter);
 
-
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(findViewById(R.id.toolbar));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -80,13 +90,6 @@ public class AddCityActivity extends BaseActivity implements CityView, AddCityVi
                 .debounce(debounce, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(s -> mCityPresenter.searchCities(s));
-
-//        Observable<String> mSearchObservable = RxTextView.afterTextChangeEvents(mSearchText)
-//                .map(textChangeEvent -> textChangeEvent.editable().toString());
-//
-//        mCityPresenter.searchCities(mSearchObservable);
-
-
     }
 
 
@@ -130,6 +133,6 @@ public class AddCityActivity extends BaseActivity implements CityView, AddCityVi
     @Override
     public void onClick(City item) {
         mCityPresenter.saveCity(item);
-        finish();
+        startActivity(MainActivity.buildIntent(this));
     }
 }

@@ -1,8 +1,6 @@
 package com.dima.weather.screen.detail_day;
 
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,25 +64,25 @@ public class DayDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ViewHolder viewHolder = (ViewHolder) holder;
         Resources res = viewHolder.view.getResources();
 
-        viewHolder.time.setText(mFormat.format(mDayWeather.getDayWeathers().get(position).dtTxt));
+        viewHolder.time.setText(mFormat.format(mDayWeather.getDayWeathers().get(position).getDtTxt()));
 
-        String temperatureText = (mDayWeather.getDayWeathers().get(position).main.temp > 0 ?
-                res.getString(R.string.temp_plus, (int) mDayWeather.getDayWeathers().get(position).main.temp) :
-                res.getString(R.string.temp_minus, (int) mDayWeather.getDayWeathers().get(position).main.temp));
+        String temperatureText = (mDayWeather.getDayWeathers().get(position).getMain().temp > 0 ?
+                res.getString(R.string.temp_plus, (int) mDayWeather.getDayWeathers().get(position).getMain().temp) :
+                res.getString(R.string.temp_minus, (int) mDayWeather.getDayWeathers().get(position).getMain().temp));
         viewHolder.temperature.setText(temperatureText);
 
-        String windText = res.getString(R.string.wind, mDayWeather.getDayWeathers().get(position).wind.speed);
+        String windText = res.getString(R.string.wind, mDayWeather.getDayWeathers().get(position).getWind().speed);
         viewHolder.wind.setText(windText);
 
-        String humidityText = res.getString(R.string.humidity, mDayWeather.getDayWeathers().get(position).main.humidity);
+        String humidityText = res.getString(R.string.humidity, mDayWeather.getDayWeathers().get(position).getMain().humidity);
         viewHolder.humidity.setText(humidityText);
 
-        String pressureText = res.getString(R.string.pressure, mDayWeather.getDayWeathers().get(position).main.pressure);
+        String pressureText = res.getString(R.string.pressure, mDayWeather.getDayWeathers().get(position).getMain().pressure);
         viewHolder.pressure.setText(pressureText);
 
-        Drawable img = ContextCompat.getDrawable(viewHolder.view.getContext(),
-                getIcon(mDayWeather.getDayWeathers().get(position).weather.get(0).icon));
-        viewHolder.weatherState.setImageDrawable(img);
+//        Drawable img = ContextCompat.getDrawable(viewHolder.view.getContext(),
+//                getIcon(mDayWeather.getDayWeathers().get(position).weather.get(0).icon));
+//        viewHolder.weatherState.setImageDrawable(img);
     }
 
     @Override

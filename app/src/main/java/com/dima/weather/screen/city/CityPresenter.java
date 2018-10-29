@@ -6,9 +6,6 @@ import com.dima.weather.repository.FileSourceRepository;
 import com.dima.weather.repository.LocaleRepository;
 import com.dima.weather.screen.base.BasePresenter;
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -32,7 +29,7 @@ public class CityPresenter extends BasePresenter<CityView> {
 
     void searchCities(String name) {
         Disposable listObservable = mFileSourceRepository.searchCity(name)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(d -> {
                     getViewState().showProgress();
@@ -46,25 +43,10 @@ public class CityPresenter extends BasePresenter<CityView> {
 
     void saveCity(City city) {
         mLocaleRepository.saveCity(city)
-                .subscribe(o -> {}, throwable -> getViewState().showError(throwable.toString()));
-    }
-
-
-    void searchCities(Observable<String> observable) {
-        Disposable listObservable = observable
-                .map(String::trim)
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .switchMap(s -> mFileSourceRepository.searchCity(s))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe((d) -> {
-                    getViewState().showProgress();
-                    getViewState().clearCities();
-                })
-                .doAfterTerminate(() -> getViewState().hideProgress())
-                .subscribe(city -> getViewState().addCityToList(city),
-                        throwable -> getViewState().showError(throwable.getMessage()));
-        unsubscribeOnDestroy(listObservable);
+                .subscribe(o -> {
+                }, throwable -> getViewState().showError(throwable.toString()));
     }
 
 }

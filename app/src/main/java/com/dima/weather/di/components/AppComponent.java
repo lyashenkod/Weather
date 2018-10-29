@@ -9,10 +9,13 @@ import com.dima.weather.screen.main.MainActivity;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import io.realm.Realm;
 
 @Singleton
 @Component(modules = {DataModule.class})
 public interface AppComponent {
+
+    Realm getRealm();
 
     void inject(MainActivity mainActivity);
 

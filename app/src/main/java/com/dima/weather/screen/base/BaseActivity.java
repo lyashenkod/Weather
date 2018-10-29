@@ -1,7 +1,7 @@
 package com.dima.weather.screen.base;
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.design.widget.Snackbar;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.dima.weather.R;
@@ -27,12 +27,16 @@ public class BaseActivity extends MvpAppCompatActivity implements BaseView{
 
     @Override
     public void showError(String  message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT);
+       // Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     @Override
     public void showError() {
-        Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT);
+     //   Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error), Snackbar.LENGTH_LONG)
+                .show();
     }
 
     @Override

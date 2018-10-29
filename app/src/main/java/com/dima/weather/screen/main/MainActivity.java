@@ -15,7 +15,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,27 +26,30 @@ import com.dima.weather.model.CurrentWeather;
 import com.dima.weather.repository.LocaleRepository;
 import com.dima.weather.repository.WeatherRepository;
 import com.dima.weather.screen.ActivityCallback;
+import com.dima.weather.screen.FragmentCallback;
 import com.dima.weather.screen.ViewHelper;
 import com.dima.weather.screen.base.BaseActivity;
 import com.dima.weather.screen.city.AddCityActivity;
 import com.dima.weather.screen.detail.DetailFragment;
+import com.dima.weather.util.StringUtil;
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements MainView, ActivityCallback,
         AppBarLayout.OnOffsetChangedListener, NavigationDrawerAdapter.OnItemClickListener {
 
     private boolean appBarState;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault());
+
+    private NavigationDrawerAdapter listAdapter;
+    private FragmentCallback mFragmentCallback;
 
     @Nullable
     @BindView(R.id.backdrop)
@@ -79,18 +81,21 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
     NavigationView mNavigationView;
     @BindView(R.id.drag_list_view)
     DragListView mDynamicListView;
-    @BindView(R.id.search_button)
-    Button mSearchButton;
+    @BindView(R.id.navigation_header_background)
+    ImageView navigationHeaderBackground;
 
     @Inject
     LocaleRepository mLocaleRepository;
     @Inject
     WeatherRepository mWeatherRepository;
+
     @InjectPresenter
     MainPresenter mMainPresenter;
 
-
-    private NavigationDrawerAdapter listAdapter;
+    public static Intent buildIntent(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        return intent;
+    }
 
 
     @ProvidePresenter
@@ -99,84 +104,48 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
         return new MainPresenter(mWeatherRepository, mLocaleRepository);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         initToolbar();
-        //   mMainPresenter.getWeatherData("Kiev");
-
         initNavigation();
-
 
         mAppBar.addOnOffsetChangedListener(this);
         if (savedInstanceState != null) {
             appBarState = savedInstanceState.getBoolean(SAVE_ORIENTATION);
             mAppBar.setExpanded(appBarState);
             if (toolbar != null)
-                toolbar.setTitle(savedInstanceState.getString(SAVE_TITLE));
+                toolbar.setTitle(mMainPresenter.getCurrentCity());
         }
 
         if (savedInstanceState == null) {
-            DetailFragment fragment = DetailFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.city_detail_container, fragment)
+                    .add(R.id.city_detail_container, new DetailFragment())
                     .commit();
         }
-
-        mSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddCityActivity.class));
-            }
-        });
     }
+
+
+    @OnClick(R.id.search_button)
+    public void searchClick() {
+        startActivity(AddCityActivity.buildIntent(this));
+    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVE_ORIENTATION, appBarState);
-        if (toolbar != null)
-            outState.putString(SAVE_TITLE, toolbar.getTitle().toString());
-
-    }
-
-    private void initToolbar() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(MainActivity.this, mDrawerLayout,
-                toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
 
     }
 
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        providePresenter().closeRealm();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mMainPresenter.getAllCities();
-    }
-
-    private void initNavigation() {
-        mDynamicListView.setLayoutManager(new LinearLayoutManager(this));
-        mDynamicListView.setCanDragHorizontally(false);
-        mDynamicListView.setCustomDragItem(new MyDragItem(this, R.layout.navigation_list_item));
-        listAdapter = new NavigationDrawerAdapter(new ArrayList<>(), R.layout.navigation_list_item, R.id.image,
-                false, this);
-        mDynamicListView.setAdapter(listAdapter, true);
-
-
-    }
-
-    @Override
-    public void setItemList(ArrayList<Pair<Long, String>> itemList) {
+    public void showNavigationCityList(ArrayList<Pair<Long, String>> itemList) {
         listAdapter.setItemList(itemList);
     }
 
@@ -194,76 +163,47 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
         toolbar.setTitle(title);
     }
 
+
+    @Override
+    public void showCurrentWeatherData(@NonNull String city, @NonNull CurrentWeather currentWeather) {
+        String fileName = "01d";
+        if (currentWeather.getWeather() != null) fileName = currentWeather.getWeather().icon + ".jpg";
+        if (backgroundIV != null) ViewHelper.setAssetImageFile(fileName, backgroundIV);
+
+        String temperature = (currentWeather.getMain().temp > 0 ?
+                getResources().getString(R.string.temp_plus, (int) currentWeather.getMain().temp) :
+                getResources().getString(R.string.temp_minus, (int) currentWeather.getMain().temp));
+        if (headerTemp != null)
+            headerTemp.setText(temperature);
+
+        String wind = getResources().getString(R.string.wind, currentWeather.getWind().speed);
+        if (headerWind != null)
+            headerWind.setText(wind);
+
+        String humidityText = getResources().getString(R.string.humidity, currentWeather.getMain().humidity);
+        if (headerHumidity != null)
+            headerHumidity.setText(humidityText);
+
+        String pressureText = getResources().getString(R.string.pressure, currentWeather.getMain().pressure);
+        if (headerPressure != null)
+            headerPressure.setText(pressureText);
+
+        if (headerPressure != null)
+            headerDate.setText(StringUtil.getDateFormat(this).format(currentWeather.getDtTxt()));
+
+        //   ViewHelper.setAssetImageFile(fileName, navigationHeaderBackground);
+        setToolbarTitle(city);
+    }
+
     @Override
     public void showForecast(@NonNull CurrentWeather currentWeather) {
-        String fileName = currentWeather.weather.get(0).icon + ".jpg";
-        if (backgroundIV != null)
-            ViewHelper.setAssetImageFile(fileName, backgroundIV);
-
-        String temperature = (currentWeather.main.temp > 0 ?
-                getResources().getString(R.string.temp_plus, (int) currentWeather.main.temp) :
-                getResources().getString(R.string.temp_minus, (int) currentWeather.main.temp));
-        if (headerTemp != null)
-            headerTemp.setText(temperature);
-
-        String wind = getResources().getString(R.string.wind, currentWeather.wind.speed);
-        if (headerWind != null)
-            headerWind.setText(wind);
-
-        String humidityText = getResources().getString(R.string.humidity, currentWeather.main.humidity);
-        if (headerHumidity != null)
-            headerHumidity.setText(humidityText);
-
-        String pressureText = getResources().getString(R.string.pressure, currentWeather.main.pressure);
-        if (headerPressure != null)
-            headerPressure.setText(pressureText);
-
-        if (headerPressure != null)
-            headerDate.setText(dateFormat.format(currentWeather.dtTxt));
-
-        initNavigationData(currentWeather);
-
     }
-
-    private void initNavigationData(@NonNull CurrentWeather currentWeather) {
-        View headerLayout = mNavigationView.inflateHeaderView(R.layout.navigation_header);
-        ImageView headerBackground = ButterKnife.findById(headerLayout, R.id.navigation_header_background);
-        String fileName = currentWeather.weather.get(0).icon + ".jpg";
-        ViewHelper.setAssetImageFile(fileName, headerBackground);
-    }
-
 
     @Override
-    public void showCurrentWeatherData(@NonNull CurrentWeather currentWeather) {
-
-        String fileName = currentWeather.weather.get(0).icon + ".jpg";
-        if (backgroundIV != null)
-            ViewHelper.setAssetImageFile(fileName, backgroundIV);
-
-        String temperature = (currentWeather.main.temp > 0 ?
-                getResources().getString(R.string.temp_plus, (int) currentWeather.main.temp) :
-                getResources().getString(R.string.temp_minus, (int) currentWeather.main.temp));
-        if (headerTemp != null)
-            headerTemp.setText(temperature);
-
-        String wind = getResources().getString(R.string.wind, currentWeather.wind.speed);
-        if (headerWind != null)
-            headerWind.setText(wind);
-
-        String humidityText = getResources().getString(R.string.humidity, currentWeather.main.humidity);
-        if (headerHumidity != null)
-            headerHumidity.setText(humidityText);
-
-        String pressureText = getResources().getString(R.string.pressure, currentWeather.main.pressure);
-        if (headerPressure != null)
-            headerPressure.setText(pressureText);
-
-
-//        if (headerPressure != null)
-//            headerDate.setText(dateFormat.format(currentWeather.dtTxt));
-
-
+    public void getForecast(@NonNull String city) {
+        mFragmentCallback.getForecast(city);
     }
+
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
@@ -274,10 +214,38 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
     }
 
     @Override
-    public void onClick(String cityName) {
-        mMainPresenter.getWeatherData(cityName);
+    public void dragItemOnClick(String cityName) {
+        updateInfo(cityName);
+        assert mDrawerLayout != null;
         mDrawerLayout.closeDrawers();
         setToolbarTitle(cityName);
+    }
+
+    public void getFragmentCallback(FragmentCallback fragmentCallback) {
+        this.mFragmentCallback = fragmentCallback;
+    }
+
+    private void initToolbar() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(MainActivity.this, mDrawerLayout,
+                toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
+        mDrawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    private void initNavigation() {
+        mDynamicListView.setLayoutManager(new LinearLayoutManager(this));
+        mDynamicListView.setCanDragHorizontally(false);
+        mDynamicListView.setCustomDragItem(new MyDragItem(this, R.layout.navigation_list_item));
+        listAdapter = new NavigationDrawerAdapter(new ArrayList<>(), R.layout.navigation_list_item, R.id.image,
+                false, this);
+        mDynamicListView.setAdapter(listAdapter, true);
+        mDynamicListView.setDragListListener(mDragListListener);
+    }
+
+    private void updateInfo(String city) {
+        mMainPresenter.setCurrentCity(city);
+        mMainPresenter.getWeatherData(city);
+        mMainPresenter.getForecast(city);
     }
 
     private static class MyDragItem extends DragItem {
@@ -292,4 +260,23 @@ public class MainActivity extends BaseActivity implements MainView, ActivityCall
             dragView.findViewById(R.id.item_layout).setBackgroundColor(dragView.getResources().getColor(R.color.colorPrimary));
         }
     }
+
+    private DragListView.DragListListener mDragListListener = new DragListView.DragListListener() {
+        @Override
+        public void onItemDragStarted(int position) {
+
+        }
+
+        @Override
+        public void onItemDragging(int itemPosition, float x, float y) {
+
+        }
+
+        @Override
+        public void onItemDragEnded(int fromPosition, int toPosition) {
+            if (fromPosition != toPosition && toPosition == 0) {
+                updateInfo(listAdapter.getItemList().get(toPosition).second);
+            }
+        }
+    };
 }

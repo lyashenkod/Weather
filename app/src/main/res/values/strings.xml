@@ -6,6 +6,7 @@
     <!-- general strings -->
     <string name="loading"> Loading…</string>
     <string name="error"> Error !!!</string>
+	<string name="no_network"> No network connection!</string>
 
 
     <string name="title">Kiev</string>

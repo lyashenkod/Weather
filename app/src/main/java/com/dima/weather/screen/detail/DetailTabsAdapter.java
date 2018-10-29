@@ -2,7 +2,7 @@ package com.dima.weather.screen.detail;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.dima.weather.model.DayWeather;
 import com.dima.weather.screen.detail_day.DayDetailFragment;
@@ -15,7 +15,7 @@ import java.util.Locale;
  * Created by Liashenko Dima on 26.06.2017.
  */
 
-public class DetailTabsAdapter extends FragmentPagerAdapter {
+public class DetailTabsAdapter extends FragmentStatePagerAdapter {
 
     private int tabCount;
     private SimpleDateFormat dayFormat = new SimpleDateFormat("EEE  d", Locale.getDefault());
@@ -37,7 +37,7 @@ public class DetailTabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-       return String.valueOf(dayFormat.format(mCurrentWeathers.get(position).getDayWeathers().get(0).dtTxt));
+       return String.valueOf(dayFormat.format(mCurrentWeathers.get(position).getDayWeathers().get(0).getDtTxt()));
     }
 
     public void setTitles(ArrayList<DayWeather> currentWeathers) {

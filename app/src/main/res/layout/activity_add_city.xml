@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -12,9 +12,9 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            app:theme="@style/ToolbarStyle"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
+            android:layout_height="?attr/actionBarSize"
+            app:theme="@style/ToolBarStyle"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -31,17 +31,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/medium"
             android:layout_marginLeft="@dimen/medium"
             android:layout_marginRight="@dimen/medium"
+            android:layout_marginTop="@dimen/medium"
             android:singleLine="true"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/city_search_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/small"
-            android:layout_below="@+id/edit_text"/>
+            android:layout_below="@+id/edit_text"
+            android:layout_margin="@dimen/small"/>
 
         <LinearLayout
             android:id="@+id/background_container"
@@ -73,8 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:indeterminateTint="@color/blue"
         android:layout_marginTop="?attr/actionBarSize"
-        android:visibility="invisible"
-        android:indeterminate="true"/>
+        android:indeterminate="true"
+        android:indeterminateTint="@color/blue"
+        android:visibility="invisible"/>
 </android.support.design.widget.CoordinatorLayout>

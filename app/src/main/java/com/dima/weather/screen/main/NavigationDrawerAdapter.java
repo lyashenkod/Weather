@@ -61,7 +61,7 @@ class NavigationDrawerAdapter extends DragItemAdapter<Pair<Long, String>, Naviga
     }
 
     public interface OnItemClickListener {
-        void onClick(String cityName);
+        void dragItemOnClick(String cityName);
     }
 
     @Override
@@ -78,7 +78,7 @@ class NavigationDrawerAdapter extends DragItemAdapter<Pair<Long, String>, Naviga
         }
 
         public void click(final String city, final OnItemClickListener listener) {
-            itemView.setOnClickListener(view -> listener.onClick(city));
+            itemView.setOnClickListener(view -> listener.dragItemOnClick(city));
         }
 
     }

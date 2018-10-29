@@ -11,6 +11,6 @@
     <string name="city_caption">Город: </string>
     <string name="country_caption">Страна: </string>
     <string name="add_city_title">Добавить город</string>
-
+    <string name="no_network">Нет соединения с интернетом!</string>
 
 </resources>
